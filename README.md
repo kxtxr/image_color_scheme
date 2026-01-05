@@ -1,0 +1,187 @@
+# image_color_scheme
+
+A Flutter widget that dynamically extracts a `ColorScheme` from images using Material Design's dynamic color algorithm. Perfect for creating adaptive UIs that respond to user avatars, album art, or any other imagery.
+
+## Features
+
+- 🎨 **Automatic Color Extraction**: Derives a complete Material `ColorScheme` from any image
+- 🔄 **Dynamic Updates**: Rebuilds when the image changes or theme brightness switches
+- 🌐 **Network & Local Images**: Supports `ImageProvider` including `CachedNetworkImageProvider`, `MemoryImage`, `AssetImage`, and more
+- 🎯 **Theme-Aware**: Respects `Theme.of(context).brightness` and falls back to the default color scheme while loading
+- ⚡ **Lifecycle Management**: Proper cleanup and mounted checks prevent memory leaks
+- 🛠️ **Customizable**: Configure contrast level and dynamic scheme variant
+
+## Getting Started
+
+Add the package to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  image_color_scheme: ^1.0.0
+```
+
+Then run:
+
+```bash
+flutter pub get
+```
+
+## Usage
+
+### Basic Example (Network Image URL)
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:image_color_scheme/image_color_scheme.dart';
+
+class ProfilePage extends StatelessWidget {
+  final String avatarUrl;
+
+  const ProfilePage({super.key, required this.avatarUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return ImageColorSchemeBuilder(
+      imageUrl: avatarUrl,
+      builder: (context, colorScheme) {
+        return Scaffold(
+          backgroundColor: colorScheme.surface,
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  colorScheme.primary,
+                  colorScheme.secondary,
+                  colorScheme.surface,
+                ],
+              ),
+            ),
+            child: Center(
+              child: Text(
+                'Dynamic Colors!',
+                style: TextStyle(color: colorScheme.onPrimary),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+```
+
+### Using Custom Image Providers
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:image_color_scheme/image_color_scheme.dart';
+
+class AlbumArtView extends StatelessWidget {
+  final Uint8List imageBytes;
+
+  const AlbumArtView({super.key, required this.imageBytes});
+
+  @override
+  Widget build(BuildContext context) {
+    return ImageColorSchemeBuilder.fromProvider(
+      provider: MemoryImage(imageBytes),
+      builder: (context, colorScheme) {
+        return Card(
+          color: colorScheme.primaryContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'Now Playing',
+              style: TextStyle(color: colorScheme.onPrimaryContainer),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+```
+
+### Advanced: Direct Function Call
+
+For cases where you need the color scheme without the widget wrapper:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:image_color_scheme/image_color_scheme.dart';
+
+Future<void> example() async {
+  final provider = NetworkImage('https://example.com/image.png');
+
+  final colorScheme = await computeColorSchemeFromImageProvider(
+    provider,
+    Brightness.dark,
+    contrastLevel: 1.0,
+    dynamicSchemeVariant: DynamicSchemeVariant.tonalSpot,
+  );
+
+  print('Primary color: ${colorScheme.primary}');
+}
+```
+
+## API Reference
+
+### ImageColorSchemeBuilder
+
+A `StatefulWidget` that extracts a `ColorScheme` from an image and rebuilds when ready.
+
+#### Constructors
+
+**`ImageColorSchemeBuilder`** (named constructor for URL)
+
+- `imageUrl` (String, required): Network image URL (uses `CachedNetworkImageProvider`)
+- `builder` (required): Widget builder receiving `(BuildContext, ColorScheme)`
+
+**`ImageColorSchemeBuilder.fromProvider`**
+
+- `provider` (ImageProvider, required): Any Flutter `ImageProvider`
+- `builder` (required): Widget builder receiving `(BuildContext, ColorScheme)`
+
+### computeColorSchemeFromImageProvider
+
+Directly computes a `ColorScheme` from an `ImageProvider`.
+
+**Parameters:**
+
+- `provider` (ImageProvider, required): Image source
+- `brightness` (Brightness, required): Light or dark theme
+- `contrastLevel` (double, optional): Defaults to 1.0
+- `dynamicSchemeVariant` (DynamicSchemeVariant, optional): Defaults to `DynamicSchemeVariant.tonalSpot`
+
+**Returns:** `Future<ColorScheme>`
+
+## How It Works
+
+1. The widget creates an internal `ImageProvider` from the URL or accepts one directly
+2. When the image loads, it calls Flutter's `ColorScheme.fromImageProvider`
+3. The extracted scheme is cached in a `ValueNotifier`
+4. The builder is called with the default theme scheme initially, then again with the extracted scheme
+5. If the image URL/provider changes, the process restarts
+
+## Examples
+
+See the `/example` folder for:
+
+- Basic usage with network images
+- Asset images
+- Memory images
+- Animated transitions between color schemes
+
+## Additional Information
+
+### Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request on [GitHub](https://github.com/kxtxr/image_color_scheme).
+
+### License
+
+MIT License - see LICENSE file for details.
+
+### Credits
+
+Built using Flutter's Material Design 3 dynamic color system.
