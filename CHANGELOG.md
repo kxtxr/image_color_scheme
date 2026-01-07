@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Updated SDK constraint to `^3.4.3` for broader compatibility
+
 ## 1.0.4
 
 * **Fixed:** Color scheme now updates correctly when image provider changes multiple times
