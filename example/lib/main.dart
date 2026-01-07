@@ -142,11 +142,15 @@ class NetworkImageExample extends StatelessWidget {
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
+                leading: BackButton(color: colorScheme.onPrimary),
                 expandedHeight: 200,
                 pinned: true,
                 backgroundColor: colorScheme.primary,
                 flexibleSpace: FlexibleSpaceBar(
-                  title: const Text('Network Image'),
+                  title: Text(
+                    'Network Image',
+                    style: TextStyle(color: colorScheme.onPrimary),
+                  ),
                   background: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(

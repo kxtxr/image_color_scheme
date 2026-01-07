@@ -144,8 +144,9 @@ class _ImageColorSchemeBuilderState extends State<ImageColorSchemeBuilder> {
     if (oldWidget.provider != widget.provider ||
         oldWidget.contrastLevel != widget.contrastLevel ||
         oldWidget.dynamicSchemeVariant != widget.dynamicSchemeVariant) {
-      _currentProvider = null;
+      _currentProvider = widget.provider;
       _colorScheme.value = null;
+      _computeColorScheme();
     }
   }
 

@@ -16,8 +16,8 @@ A Flutter widget that dynamically extracts a `ColorScheme` from images using Mat
 
 Below are examples of the library used inside apps. These are generated from the example app and real UI compositions.
 
-| ![Dynamic colors example 1](https://github.com/kxtxr/image_color_scheme/raw/main/screenshots/Screenshot_20260107_143827.png) | ![Dynamic colors example 2](https://raw.githubusercontent.com/kxtxr/image_color_scheme/main/screenshots/Screenshot_20260107_163322.png) |
-|---|---|
+| ![Screenshot 1](https://raw.githubusercontent.com/kxtxr/image_color_scheme/main/screenshots/Screenshot_20260107_143827.png) | ![Screenshot 2](https://raw.githubusercontent.com/kxtxr/image_color_scheme/main/screenshots/Screenshot_20260107_163322.png) | ![Screenshot 3](https://raw.githubusercontent.com/kxtxr/image_color_scheme/main/screenshots/Screenshot_20260107_171315.png) | ![Screenshot 4](https://raw.githubusercontent.com/kxtxr/image_color_scheme/main/screenshots/Screenshot_20260107_171630.png) |
+|:---:|:---:|:---:|:---:|
 
 ## Getting Started
 
