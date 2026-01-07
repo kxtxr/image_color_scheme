@@ -135,7 +135,7 @@ class NetworkImageExample extends StatelessWidget {
     const imageUrl = 'https://picsum.photos/seed/flutter/400/400';
 
     return ImageColorSchemeBuilder(
-      imageUrl: imageUrl,
+      provider: const NetworkImage(imageUrl),
       builder: (context, colorScheme) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
@@ -263,7 +263,7 @@ class _MemoryImageExampleState extends State<MemoryImageExample> {
       );
     }
 
-    return ImageColorSchemeBuilder.fromProvider(
+    return ImageColorSchemeBuilder(
       provider: MemoryImage(_imageBytes!),
       builder: (context, colorScheme) {
         return Scaffold(
@@ -350,7 +350,7 @@ class _MultipleImagesExampleState extends State<MultipleImagesExample> {
   @override
   Widget build(BuildContext context) {
     return ImageColorSchemeBuilder(
-      imageUrl: _imageUrls[_currentIndex],
+      provider: NetworkImage(_imageUrls[_currentIndex]),
       builder: (context, colorScheme) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
@@ -434,7 +434,7 @@ class ProfileCardExample extends StatelessWidget {
     const imageUrl = 'https://picsum.photos/seed/profile/400/400';
 
     return ImageColorSchemeBuilder(
-      imageUrl: imageUrl,
+      provider: const NetworkImage(imageUrl),
       builder: (context, colorScheme) {
         return Scaffold(
           backgroundColor: colorScheme.surface,

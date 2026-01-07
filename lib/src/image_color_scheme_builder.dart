@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'compute.dart';
@@ -9,17 +8,13 @@ import 'compute.dart';
 /// This widget is useful for creating adaptive UIs that respond to imagery,
 /// such as user avatars, album art, or other dynamic content.
 ///
-/// The widget provides two constructors:
-/// - [ImageColorSchemeBuilder] for network images via URL
-/// - [ImageColorSchemeBuilder.fromProvider] for any [ImageProvider]
-///
 /// The builder is called initially with the default [ColorScheme] from the
 /// current theme, then called again once the color extraction completes.
 ///
 /// Example:
 /// ```dart
 /// ImageColorSchemeBuilder(
-///   imageUrl: 'https://example.com/avatar.png',
+///   provider: NetworkImage('https://example.com/avatar.png'),
 ///   builder: (context, colorScheme) {
 ///     return Scaffold(
 ///       backgroundColor: colorScheme.surface,
@@ -35,16 +30,11 @@ import 'compute.dart';
 /// )
 /// ```
 class ImageColorSchemeBuilder extends StatefulWidget {
-  /// The network image URL to extract colors from.
-  ///
-  /// This is used with the default constructor and internally creates a
-  /// [CachedNetworkImageProvider].
-  final String? imageUrl;
-
   /// The image provider to extract colors from.
   ///
-  /// This is used with the [fromProvider] constructor.
-  final ImageProvider<Object>? imageProvider;
+  /// This accepts any [ImageProvider], including [NetworkImage], [MemoryImage],
+  /// [AssetImage], [FileImage], etc.
+  final ImageProvider<Object> provider;
 
   /// The builder function that receives the extracted [ColorScheme].
   ///
@@ -52,66 +42,41 @@ class ImageColorSchemeBuilder extends StatefulWidget {
   /// again once color extraction completes.
   final Widget Function(BuildContext, ColorScheme) builder;
 
-  /// Creates an [ImageColorSchemeBuilder] that extracts colors from a
-  /// network image URL.
-  ///
-  /// The [imageUrl] must be a valid network image URL.
-  /// The [builder] is called with the current color scheme.
-  const ImageColorSchemeBuilder({
-    super.key,
-    required String imageUrl,
-    required this.builder,
-  })  : imageUrl = imageUrl,
-        imageProvider = null;
-
   /// Creates an [ImageColorSchemeBuilder] that extracts colors from an
   /// [ImageProvider].
   ///
-  /// This constructor accepts any [ImageProvider], including [MemoryImage],
-  /// [AssetImage], [FileImage], etc.
+  /// The [provider] accepts any [ImageProvider], including [NetworkImage],
+  /// [MemoryImage], [AssetImage], [FileImage], etc.
   ///
   /// Example:
   /// ```dart
-  /// ImageColorSchemeBuilder.fromProvider(
-  ///   provider: MemoryImage(bytes),
+  /// ImageColorSchemeBuilder(
+  ///   provider: NetworkImage('https://example.com/avatar.png'),
   ///   builder: (context, colorScheme) => YourWidget(),
   /// )
   /// ```
-  const ImageColorSchemeBuilder.fromProvider({
+  const ImageColorSchemeBuilder({
     super.key,
-    required ImageProvider<Object> provider,
+    required this.provider,
     required this.builder,
-  })  : imageProvider = provider,
-        imageUrl = null;
+  });
 
   @override
-  State<ImageColorSchemeBuilder> createState() => _ImageColorSchemeBuilderState();
+  State<ImageColorSchemeBuilder> createState() =>
+      _ImageColorSchemeBuilderState();
 }
 
 class _ImageColorSchemeBuilderState extends State<ImageColorSchemeBuilder> {
   final ValueNotifier<ColorScheme?> _colorScheme = ValueNotifier(null);
-  final ValueNotifier<ImageProvider<Object>?> _imageProvider = ValueNotifier(null);
+  ImageProvider<Object>? _currentProvider;
 
   @override
   void initState() {
     super.initState();
-    _imageProvider.addListener(() {
-      if (_imageProvider.value != null && mounted) {
-        computeColorSchemeFromImageProvider(
-          _imageProvider.value!,
-          Theme.of(context).brightness,
-        ).then((colorScheme) {
-          if (mounted) {
-            _colorScheme.value = colorScheme;
-          }
-        });
-      }
-    });
   }
 
   @override
   void dispose() {
-    _imageProvider.dispose();
     _colorScheme.dispose();
     super.dispose();
   }
@@ -119,23 +84,30 @@ class _ImageColorSchemeBuilderState extends State<ImageColorSchemeBuilder> {
   @override
   void didUpdateWidget(covariant ImageColorSchemeBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final Object? oldKey = oldWidget.imageUrl ?? oldWidget.imageProvider;
-    final Object? newKey = widget.imageUrl ?? widget.imageProvider;
-    if (oldKey != newKey) {
-      _imageProvider.value = null;
+    if (oldWidget.provider != widget.provider) {
+      _currentProvider = null;
+      _colorScheme.value = null;
     }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_imageProvider.value == null) {
-      if (widget.imageProvider != null) {
-        _imageProvider.value = widget.imageProvider;
-      } else if (widget.imageUrl != null) {
-        _imageProvider.value = CachedNetworkImageProvider(widget.imageUrl!);
-      }
+    if (_currentProvider != widget.provider) {
+      _currentProvider = widget.provider;
+      _computeColorScheme();
     }
+  }
+
+  void _computeColorScheme() {
+    computeColorSchemeFromImageProvider(
+      widget.provider,
+      Theme.of(context).brightness,
+    ).then((colorScheme) {
+      if (mounted) {
+        _colorScheme.value = colorScheme;
+      }
+    });
   }
 
   @override

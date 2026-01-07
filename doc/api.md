@@ -6,38 +6,20 @@
 
 A widget that dynamically extracts a `ColorScheme` from an image and rebuilds when the color scheme is ready.
 
-#### Constructors
+#### Constructor
 
 ##### ImageColorSchemeBuilder()
 
-Creates an `ImageColorSchemeBuilder` that extracts colors from a network image URL.
+Creates an `ImageColorSchemeBuilder` that extracts colors from an `ImageProvider`.
 
 **Parameters:**
-- `imageUrl` (String, required): Network image URL
+- `provider` (ImageProvider, required): Image source (e.g., NetworkImage, MemoryImage, AssetImage)
 - `builder` (Widget Function(BuildContext, ColorScheme), required): Widget builder function
 
 **Example:**
 ```dart
 ImageColorSchemeBuilder(
-  imageUrl: 'https://example.com/avatar.png',
-  builder: (context, colorScheme) {
-    return Container(color: colorScheme.primary);
-  },
-)
-```
-
-##### ImageColorSchemeBuilder.fromProvider()
-
-Creates an `ImageColorSchemeBuilder` that extracts colors from an `ImageProvider`.
-
-**Parameters:**
-- `provider` (ImageProvider, required): Image source
-- `builder` (Widget Function(BuildContext, ColorScheme), required): Widget builder function
-
-**Example:**
-```dart
-ImageColorSchemeBuilder.fromProvider(
-  provider: MemoryImage(bytes),
+  provider: NetworkImage('https://example.com/avatar.png'),
   builder: (context, colorScheme) {
     return Container(color: colorScheme.primary);
   },
@@ -46,14 +28,13 @@ ImageColorSchemeBuilder.fromProvider(
 
 #### Properties
 
-- `imageUrl` (String?): The network image URL to extract colors from
-- `imageProvider` (ImageProvider?): The image provider to extract colors from
+- `provider` (ImageProvider): The image provider to extract colors from
 - `builder` (Widget Function(BuildContext, ColorScheme)): The builder function
 
 #### Behavior
 
 1. Initially calls builder with the default theme color scheme
-2. Loads the image from URL or provider
+2. Loads the image from the provided `ImageProvider`
 3. Extracts colors using Material Design's dynamic color algorithm
 4. Calls builder again with the extracted color scheme
 5. Rebuilds when the image changes
@@ -152,7 +133,7 @@ Available variants for `dynamicSchemeVariant`:
 2. **Use with Theme**: Wrap in `Theme` widget to provide default colors
 3. **Handle loading states**: The widget rebuilds when colors are ready
 4. **Optimize images**: Smaller images extract faster
-5. **Cache images**: Use `CachedNetworkImageProvider` for network images (built-in for URL constructor)
+5. **Cache images**: Consider using a caching `ImageProvider` for network images if needed
 6. **Test brightness modes**: Verify both light and dark themes
 7. **Accessibility**: Consider contrast levels for readability
 
@@ -171,7 +152,7 @@ If migrating from Material 2 `ColorScheme`, note:
 - Images are cached by Flutter's image cache
 - The widget disposes resources properly
 - No memory leaks with proper lifecycle management
-- Use `.fromProvider` for better control over caching
+- Provide your own `ImageProvider` for full control over caching
 
 ## Troubleshooting
 

@@ -8,16 +8,16 @@
 /// ```dart
 /// import 'package:image_color_scheme/image_color_scheme.dart';
 ///
-/// // Using a network image URL:
+/// // Using an ImageProvider directly (e.g. NetworkImage):
 /// ImageColorSchemeBuilder(
-///   imageUrl: 'https://example.com/avatar.png',
+///   provider: NetworkImage('https://example.com/avatar.png'),
 ///   builder: (context, colorScheme) {
 ///     return YourWidget(colorScheme: colorScheme);
 ///   },
 /// )
 ///
-/// // Using any ImageProvider:
-/// ImageColorSchemeBuilder.fromProvider(
+/// // Using any ImageProvider (e.g. MemoryImage):
+/// ImageColorSchemeBuilder(
 ///   provider: MemoryImage(bytes),
 ///   builder: (context, colorScheme) {
 ///     return YourWidget(colorScheme: colorScheme);

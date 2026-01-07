@@ -6,10 +6,19 @@ A Flutter widget that dynamically extracts a `ColorScheme` from images using Mat
 
 - 🎨 **Automatic Color Extraction**: Derives a complete Material `ColorScheme` from any image
 - 🔄 **Dynamic Updates**: Rebuilds when the image changes or theme brightness switches
-- 🌐 **Network & Local Images**: Supports `ImageProvider` including `CachedNetworkImageProvider`, `MemoryImage`, `AssetImage`, and more
+- 🌐 **Flexible Image Sources**: Works with any `ImageProvider` including `NetworkImage`, `MemoryImage`, `AssetImage`, `FileImage`, and more
 - 🎯 **Theme-Aware**: Respects `Theme.of(context).brightness` and falls back to the default color scheme while loading
 - ⚡ **Lifecycle Management**: Proper cleanup and mounted checks prevent memory leaks
 - 🛠️ **Customizable**: Configure contrast level and dynamic scheme variant
+- 📦 **Zero Dependencies**: No external dependencies beyond Flutter itself
+
+## Screenshots
+
+Below are examples of the library used inside apps. These are generated from the example app and real UI compositions.
+
+![Dynamic colors example 1](screenshots/Screenshot_20260107_143827.png)
+
+![Dynamic colors example 2](screenshots/Screenshot_20260107_163322.png)
 
 ## Getting Started
 
@@ -17,7 +26,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  image_color_scheme: ^1.0.0
+  image_color_scheme: ^2.0.0
 ```
 
 Then run:
@@ -28,7 +37,7 @@ flutter pub get
 
 ## Usage
 
-### Basic Example (Network Image URL)
+### Basic Example (Network Image)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -42,7 +51,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ImageColorSchemeBuilder(
-      imageUrl: avatarUrl,
+      provider: NetworkImage(avatarUrl),
       builder: (context, colorScheme) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
@@ -70,7 +79,7 @@ class ProfilePage extends StatelessWidget {
 }
 ```
 
-### Using Custom Image Providers
+### Using Other Image Providers
 
 ```dart
 import 'package:flutter/material.dart';
@@ -83,7 +92,7 @@ class AlbumArtView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ImageColorSchemeBuilder.fromProvider(
+    return ImageColorSchemeBuilder(
       provider: MemoryImage(imageBytes),
       builder: (context, colorScheme) {
         return Card(
@@ -130,16 +139,11 @@ Future<void> example() async {
 
 A `StatefulWidget` that extracts a `ColorScheme` from an image and rebuilds when ready.
 
-#### Constructors
+#### Constructor
 
-**`ImageColorSchemeBuilder`** (named constructor for URL)
+**`ImageColorSchemeBuilder`**
 
-- `imageUrl` (String, required): Network image URL (uses `CachedNetworkImageProvider`)
-- `builder` (required): Widget builder receiving `(BuildContext, ColorScheme)`
-
-**`ImageColorSchemeBuilder.fromProvider`**
-
-- `provider` (ImageProvider, required): Any Flutter `ImageProvider`
+- `provider` (ImageProvider, required): Any Flutter `ImageProvider` (e.g., `NetworkImage`, `MemoryImage`, `AssetImage`, `FileImage`)
 - `builder` (required): Widget builder receiving `(BuildContext, ColorScheme)`
 
 ### computeColorSchemeFromImageProvider
@@ -157,11 +161,11 @@ Directly computes a `ColorScheme` from an `ImageProvider`.
 
 ## How It Works
 
-1. The widget creates an internal `ImageProvider` from the URL or accepts one directly
+1. The widget accepts an `ImageProvider` from the user
 2. When the image loads, it calls Flutter's `ColorScheme.fromImageProvider`
 3. The extracted scheme is cached in a `ValueNotifier`
 4. The builder is called with the default theme scheme initially, then again with the extracted scheme
-5. If the image URL/provider changes, the process restarts
+5. If the `ImageProvider` changes, the process restarts
 
 ## Examples
 
