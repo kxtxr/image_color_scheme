@@ -1,3 +1,9 @@
+## 1.0.4
+
+* **Fixed:** Color scheme now updates correctly when image provider changes multiple times
+  - Previously, changing the provider would only trigger a recomputation on the first change
+  - `didUpdateWidget` now properly triggers `_computeColorScheme()` when provider changes
+
 ## 1.0.3
 
 * **Breaking:** Builder signature now requires 3 parameters: `(context, colorScheme, child)`

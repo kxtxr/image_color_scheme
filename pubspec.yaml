@@ -1,6 +1,6 @@
 name: image_color_scheme
 description: A Flutter widget that dynamically extracts a ColorScheme from images and rebuilds when the scheme is ready.
-version: 1.0.3
+version: 1.0.4
 repository: https://github.com/kxtxr/image_color_scheme
 issue_tracker: https://github.com/kxtxr/image_color_scheme/issues
 
