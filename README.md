@@ -16,9 +16,8 @@ A Flutter widget that dynamically extracts a `ColorScheme` from images using Mat
 
 Below are examples of the library used inside apps. These are generated from the example app and real UI compositions.
 
-![Dynamic colors example 1](screenshots/Screenshot_20260107_143827.png)
-
-![Dynamic colors example 2](screenshots/Screenshot_20260107_163322.png)
+| ![Dynamic colors example 1](https://github.com/kxtxr/image_color_scheme/raw/main/screenshots/Screenshot_20260107_143827.png) | ![Dynamic colors example 2](https://raw.githubusercontent.com/kxtxr/image_color_scheme/main/screenshots/Screenshot_20260107_163322.png) |
+|---|---|
 
 ## Getting Started
 
@@ -52,7 +51,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ImageColorSchemeBuilder(
       provider: NetworkImage(avatarUrl),
-      builder: (context, colorScheme) {
+      builder: (context, colorScheme, child) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
           body: Container(
@@ -94,7 +93,7 @@ class AlbumArtView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ImageColorSchemeBuilder(
       provider: MemoryImage(imageBytes),
-      builder: (context, colorScheme) {
+      builder: (context, colorScheme, child) {
         return Card(
           color: colorScheme.primaryContainer,
           child: Padding(
@@ -143,8 +142,14 @@ A `StatefulWidget` that extracts a `ColorScheme` from an image and rebuilds when
 
 **`ImageColorSchemeBuilder`**
 
-- `provider` (ImageProvider, required): Any Flutter `ImageProvider` (e.g., `NetworkImage`, `MemoryImage`, `AssetImage`, `FileImage`)
-- `builder` (required): Widget builder receiving `(BuildContext, ColorScheme)`
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `provider` | `ImageProvider` | ✓ | - | Any Flutter `ImageProvider` (e.g., `NetworkImage`, `MemoryImage`, `AssetImage`, `FileImage`) |
+| `builder` | `Widget Function(BuildContext, ColorScheme, Widget?)` | ✓ | - | Widget builder receiving context, color scheme, and optional child |
+| `child` | `Widget?` | | `null` | Optional child widget passed to builder (for optimization) |
+| `contrastLevel` | `double` | | `1.0` | Contrast level (0.0 to 1.0) |
+| `dynamicSchemeVariant` | `DynamicSchemeVariant` | | `tonalSpot` | Material Design scheme variant |
+| `onError` | `void Function(Object, StackTrace)?` | | `null` | Callback when color extraction fails |
 
 ### computeColorSchemeFromImageProvider
 

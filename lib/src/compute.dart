@@ -26,7 +26,7 @@ import 'package:flutter/material.dart';
 /// print('Primary: ${colorScheme.primary}');
 /// ```
 Future<ColorScheme> computeColorSchemeFromImageProvider(
-  ImageProvider<Object> provider,
+  ImageProvider provider,
   Brightness brightness, {
   double contrastLevel = 1.0,
   DynamicSchemeVariant dynamicSchemeVariant = DynamicSchemeVariant.tonalSpot,

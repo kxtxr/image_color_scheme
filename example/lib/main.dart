@@ -136,7 +136,7 @@ class NetworkImageExample extends StatelessWidget {
 
     return ImageColorSchemeBuilder(
       provider: const NetworkImage(imageUrl),
-      builder: (context, colorScheme) {
+      builder: (context, colorScheme, _) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
           body: CustomScrollView(
@@ -265,7 +265,7 @@ class _MemoryImageExampleState extends State<MemoryImageExample> {
 
     return ImageColorSchemeBuilder(
       provider: MemoryImage(_imageBytes!),
-      builder: (context, colorScheme) {
+      builder: (context, colorScheme, child) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
           appBar: AppBar(
@@ -351,7 +351,7 @@ class _MultipleImagesExampleState extends State<MultipleImagesExample> {
   Widget build(BuildContext context) {
     return ImageColorSchemeBuilder(
       provider: NetworkImage(_imageUrls[_currentIndex]),
-      builder: (context, colorScheme) {
+      builder: (context, colorScheme, child) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
           appBar: AppBar(
@@ -435,7 +435,7 @@ class ProfileCardExample extends StatelessWidget {
 
     return ImageColorSchemeBuilder(
       provider: const NetworkImage(imageUrl),
-      builder: (context, colorScheme) {
+      builder: (context, colorScheme, child) {
         return Scaffold(
           backgroundColor: colorScheme.surface,
           body: CustomScrollView(

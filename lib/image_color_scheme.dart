@@ -11,7 +11,7 @@
 /// // Using an ImageProvider directly (e.g. NetworkImage):
 /// ImageColorSchemeBuilder(
 ///   provider: NetworkImage('https://example.com/avatar.png'),
-///   builder: (context, colorScheme) {
+///   builder: (context, colorScheme, child) {
 ///     return YourWidget(colorScheme: colorScheme);
 ///   },
 /// )
@@ -19,7 +19,7 @@
 /// // Using any ImageProvider (e.g. MemoryImage):
 /// ImageColorSchemeBuilder(
 ///   provider: MemoryImage(bytes),
-///   builder: (context, colorScheme) {
+///   builder: (context, colorScheme, child) {
 ///     return YourWidget(colorScheme: colorScheme);
 ///   },
 /// )
@@ -32,5 +32,6 @@
 /// ```
 library;
 
-export 'src/image_color_scheme_builder.dart' show ImageColorSchemeBuilder;
+export 'src/image_color_scheme_builder.dart'
+    show ImageColorSchemeBuilder, ImageColorSchemeWidgetBuilder;
 export 'src/compute.dart' show computeColorSchemeFromImageProvider;
